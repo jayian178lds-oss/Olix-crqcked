@@ -1,0 +1,82 @@
+repeat wait() until game:IsLoaded()
+
+if LPH_OBFUSCATED == nil then
+	LPH_NO_VIRTUALIZE = function(...) return (...) end
+	LPH_ENCSTR = function(...) return (...) end
+	LRM_SANITIZE = function(...) return ... end
+end
+
+local cloneref = cloneref or function(o) return o end
+local StarterGui = cloneref(game:GetService("StarterGui"))
+local Workspace = cloneref(game:GetService("Workspace"))
+
+local GameId = tostring(game.GameId)
+
+local GameList = {
+    ["10512942223"] = "Anime_Zero",
+	["994732206"] = "Blox_Fruits",
+	["648454481"] = "Grand_Piece_Online",
+	["66654135"] = "Murder_Mystery_2",
+    ["7219654364"] = "Sheriff_VS_Murderer",
+	["5595353122"] = "Slayers_2",
+	["1511883870"] = "Shindo_Life",
+	["10563114921"] = "Steal_An_Egg",
+    ["6035872082"] = "Rivals",
+   	["10035204815"] = "Ride_A_Pet"
+}
+
+local ScriptName = GameList[GameId]
+
+if not ScriptName then
+	StarterGui:SetCore("SendNotification", {
+		Title = "Solix Hub",
+		Text = "This game is not supported.",
+		Icon = "rbxassetid://103638617992222",
+	})
+	return
+end
+
+-- Path to local script
+local ScriptPath = "solixhub/Scripts/" .. ScriptName .. ".lua"
+
+-- Check if file exists
+if not isfile or not isfile(ScriptPath) then
+	StarterGui:SetCore("SendNotification", {
+		Title = "Solix Hub",
+		Text = "Script file not found: " .. ScriptPath,
+		Icon = "rbxassetid://103638617992222",
+	})
+	return
+end
+
+-- Load and execute local script
+StarterGui:SetCore("SendNotification", {
+	Title = "Solix Hub",
+	Text = "Loading " .. ScriptName .. "...",
+	Icon = "rbxassetid://103638617992222",
+})
+
+wait(0.3)
+
+local Success, Error = pcall(function()
+	local ScriptContent = readfile(ScriptPath)
+	if ScriptContent and ScriptContent ~= "" then
+		loadstring(ScriptContent)()
+	else
+		error("Script file is empty")
+	end
+end)
+
+if not Success then
+	StarterGui:SetCore("SendNotification", {
+		Title = "Solix Hub",
+		Text = "Error loading script: " .. tostring(Error),
+		Icon = "rbxassetid://103638617992222",
+	})
+else
+	StarterGui:SetCore("SendNotification", {
+		Title = "Solix Hub",
+		Text = "Script loaded successfully!",
+		Icon = "rbxassetid://103638617992222",
+	})
+end
